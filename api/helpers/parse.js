@@ -40,6 +40,22 @@ const getObjectIDIfValid = value => {
   return ObjectID.isValid(value) ? new ObjectID(value) : null
 }
 
+const getParamFromURL = (url, param) => {
+  const current_url = new URL(url);
+  const search_params = current_url.searchParams;
+  return search_params.get(param);
+}
+
+function getYoutubeIdFromUrl(url) {
+  let regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  let match = url.match(regExp);
+  if (match && match[2].length == 11) {
+    return match[2];
+  } else {
+    return null
+  }
+}
+
 module.exports = {
   getString,
   getObjectIDIfValid,
@@ -48,5 +64,7 @@ module.exports = {
   getArrayOfObjectID,
   getNumberIfValid,
   getNumberIfPositive,
-  getBooleanIfValid
+  getBooleanIfValid,
+  getParamFromURL,
+  getYoutubeIdFromUrl
 }

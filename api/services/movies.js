@@ -4,6 +4,7 @@ const Movie = require('../models/Movie')
 const ObjectID = mongoose.Types.ObjectId
 const parse = require('../helpers/parse')
 const BaseController = require('../helpers/base')
+const getVideoDetail = require('./youtube-api').getVideoDetail
 
 class MoviesService extends BaseController {
   constructor() {
@@ -29,7 +30,7 @@ class MoviesService extends BaseController {
 
   async addMovie(data) {
     try {
-      const movie = this.getValidDocumentForInsert(data)
+      const movie = await this.getValidDocumentForInsert(data)
 
       const movieCreated = await this.create(movie)
       const newMovieId = movieCreated._id.toString()
@@ -49,20 +50,27 @@ class MoviesService extends BaseController {
     await this.delete(movieId)
   }
 
-  getValidDocumentForInsert(data) {
-    const movie = {
-      created: new Date(),
-      updated: null
+  async getValidDocumentForInsert(data) {
+    try {
+      const movie = {
+        date: new Date()
+      }
+
+      const youtubeUrl = parse.getString(data.url)
+      const videoDetail = await getVideoDetail(parse.getYoutubeIdFromUrl(youtubeUrl))
+
+      movie.userCreated = data.username.split('@')[0] // parse.getObjectIDIfValid(data._id)
+      movie.title = videoDetail.snippet.title || ''
+      movie.description = videoDetail.snippet.description || ''
+      movie.likeCount = 0
+      movie.disLikeCount = 0
+      movie.url = youtubeUrl
+
+      return movie
+    } catch (error) {
+      console.log(error);
+      throw error
     }
-
-    movie.userCreated = data.username.split('@')[0] // parse.getObjectIDIfValid(data._id)
-    movie.title = parse.getString(data.title) || 'sample title'
-    movie.description = parse.getString(data.description)
-    movie.likeCount = 0
-    movie.disLikeCount = 0
-    movie.url = parse.getString(data.url)
-
-    return movie
   }
 
   getValidDocumentForUpdate(id, data) {
@@ -74,7 +82,7 @@ class MoviesService extends BaseController {
       updated: new Date()
     }
 
-    if (data.likeCount !== undefined)  {
+    if (data.likeCount !== undefined) {
       movie.likeCount = parse.getNumberIfPositive(data.likeCount)
     }
 

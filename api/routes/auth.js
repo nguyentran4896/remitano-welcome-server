@@ -25,19 +25,23 @@ class AuthRoute {
   async login(req, res, next) {
     try {
       let user = await usersService.loginUser(req.body)
+      req.cookies.token = generateJWTToken(user)
       user.password = undefined
-      res.user = user
+      req.user = user
       res.send(user)
     } catch (error) {
+      console.log(error);
       return next(error)
     }
   }
 
   async addUser(req, res, next) {
     try {
-      let newUser = await usersService.addUser(req.body)
-      generateJWTToken(newUser)
-      res.send(newUser)
+      let user = await usersService.addUser(req.body)
+      req.cookies.token  = generateJWTToken(user)
+      user.password = undefined
+      req.user = user
+      res.send(user)
     } catch (error) {
       res.status(403)
       res.send(error)

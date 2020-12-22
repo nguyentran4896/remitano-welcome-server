@@ -28,14 +28,14 @@ class UsersService extends BaseController {
   }
 
   async loginUser(data) {
-    var thisUser = this
-    return new Promise(async (resolve, reject) => {
-      let user = await thisUser.findOne(data)
-      user.comparePassword(data.password, (err, result) => {
-        if (err) reject(err)
-        resolve(user)
-      })
-    })
+    try {
+      let user = await this.findOne(data)
+      if (!user) throw ({ status: 404, message: 'Email Not Found!' })
+      return await user.comparePassword(data.password)
+    } catch (error) {
+      console.log(error);
+      throw error
+    }
   }
 
   async addUser(data) {

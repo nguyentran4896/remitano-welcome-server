@@ -40,7 +40,9 @@ class UsersService extends BaseController {
 
   async addUser(data) {
     try {
-      const user = this.getValidDocumentForInsert(data)
+      let user = await this.findOne(data)
+      if (user) throw ({ status: 409, message: 'Email\'s existed!' })
+      user = this.getValidDocumentForInsert(data)
 
       const userCreated = await this.create(user)
       const newUserId = userCreated._id.toString()

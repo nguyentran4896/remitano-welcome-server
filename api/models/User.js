@@ -15,12 +15,10 @@ const UserSchema = new Schema({
     required: true
   },
   likedVideos: [{
-    type: String,
-    unique: true
+    type: String
   }],
   disLikedVideos: [{
-    type: String,
-    unique: true
+    type: String
   }],
   created: Date,
   updated: Date

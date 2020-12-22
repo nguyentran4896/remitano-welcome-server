@@ -43,8 +43,7 @@ class AuthRoute {
       req.user = user
       res.send(user)
     } catch (error) {
-      res.status(403)
-      res.send(error)
+      return next(error)
     }
   }
 }

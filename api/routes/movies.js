@@ -31,12 +31,24 @@ class MoviesRoute {
       authenticateToken,
       this.deleteMovie.bind(this)
     )
+    this.router.get(
+      '/v1/movies-count',
+      this.countMovies.bind(this)
+    )
   }
 
   getMovies (req, res, next) {
     MoviesService.getMovies(req.query)
       .then(data => {
         res.send(data)
+      })
+      .catch(next)
+  }
+
+  countMovies (req, res, next) {
+    MoviesService.countDocuments()
+      .then(data => {
+        res.send(JSON.stringify(data))
       })
       .catch(next)
   }

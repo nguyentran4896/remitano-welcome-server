@@ -90,3 +90,18 @@ describe("Delete a movie by id", function () {
         });
     });
 });
+
+describe("Count all movies", function () {
+    // Test will pass if we get all movies
+    it("should return number of all movies", function (done) {
+        var MovieMock = sinon.mock(moviesService)
+        var expectedResult = { status: true, count: 0 }
+        MovieMock.expects('countMovies').yields(null, expectedResult)
+        moviesService.countMovies(function (err, result) {
+            MovieMock.verify()
+            MovieMock.restore()
+            expect(result.status).to.be.true && result >= 0
+            done()
+        })
+    })
+})

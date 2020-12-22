@@ -35,6 +35,10 @@ class BaseController {
     const data = await this.Model.findOne(query)
     return data
   }
+
+  async countDocuments () {
+    return await this.Model.countDocuments()
+  }
 }
 
 module.exports = BaseController

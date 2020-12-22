@@ -19,6 +19,12 @@ class MoviesService extends BaseController {
     })
   }
 
+  countMovies() {
+    return this.countDocuments().then(data => {
+      return data
+    })
+  }
+
   async getSingleMovie(id) {
     if (!ObjectID.isValid(id)) {
       return Promise.reject('Invalid identifier')

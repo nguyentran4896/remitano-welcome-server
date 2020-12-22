@@ -17,7 +17,12 @@ const authenticateToken = (req, res, next) => {
 }
 
 const generateJWTToken = (userData) => {
-    return jwt.sign(JSON.stringify(userData), process.env.JWT_SECRET);
+    let data = {
+        username: userData.username,
+        password: userData.password,
+        _id: userData._id
+    }
+    return jwt.sign(JSON.stringify(data), process.env.JWT_SECRET);
 }
 
 module.exports = {

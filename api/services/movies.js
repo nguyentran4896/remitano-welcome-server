@@ -55,7 +55,7 @@ class MoviesService extends BaseController {
       updated: null
     }
 
-    movie.userCreated = parse.getObjectIDIfValid(data._id)
+    movie.userCreated = data.username.split('@')[0] // parse.getObjectIDIfValid(data._id)
     movie.title = parse.getString(data.title) || 'sample title'
     movie.description = parse.getString(data.description)
     movie.likeCount = 0

@@ -24,3 +24,8 @@ yarn-error.log*
 
 .eslintcache
 .env
+process.json
+public/
+deploy.sh
+.youtube-credentials
+youtube-credentials.json

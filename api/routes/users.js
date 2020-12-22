@@ -1,4 +1,5 @@
 const UsersService = require('../services/users')
+const authenticateToken = require('../../jwt-auth').authenticateToken
 
 class UsersRoute {
   constructor (router) {
@@ -21,6 +22,7 @@ class UsersRoute {
     )
     this.router.put(
       '/v1/users/:id',
+      authenticateToken,
       this.updateUser.bind(this)
     )
     this.router.delete(

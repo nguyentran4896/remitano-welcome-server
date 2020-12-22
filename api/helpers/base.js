@@ -21,10 +21,19 @@ class BaseController {
 
   async findOrCreate (obj) {
     const query = {}
-    if (obj.name) query.name = obj.name
+    if (obj.username) query.username = obj.username
+    if (obj.url) query.url = obj.url
     const data = await this.Model.findOne(query)
     if (data) return data
     return await this.Model.create(obj)
+  }
+
+  async findOne (obj) {
+    const query = {}
+    if (obj.username) query.username = obj.username
+    if (obj.url) query.url = obj.url
+    const data = await this.Model.findOne(query)
+    return data
   }
 }
 

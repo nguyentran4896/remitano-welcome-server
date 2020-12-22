@@ -6,10 +6,10 @@ const parse = require('../helpers/parse')
 const BaseController = require('../helpers/base')
 
 class UsersService extends BaseController {
-  constructor () {
+  constructor() {
     super(User)
   }
-  getUsers (params = {}) {
+  getUsers(params = {}) {
     const limit = parse.getNumberIfPositive(params.limit) || 1000
     const offset = parse.getNumberIfPositive(params.offset) || 0
 
@@ -18,7 +18,7 @@ class UsersService extends BaseController {
     })
   }
 
-  async getSingleUser (id) {
+  async getSingleUser(id) {
     if (!ObjectID.isValid(id)) {
       return Promise.reject('Invalid identifier')
     }
@@ -27,20 +27,32 @@ class UsersService extends BaseController {
     return {}
   }
 
-  async addUser (data) {
+  async loginUser(data) {
+    var thisUser = this
+    return new Promise(async (resolve, reject) => {
+      let user = await thisUser.findOne(data)
+      user.comparePassword(data.password, (err, result) => {
+        if (err) reject(err)
+        resolve(user)
+      })
+    })
+  }
+
+  async addUser(data) {
     try {
       const user = this.getValidDocumentForInsert(data)
 
-      const userCreated = await this.findOrCreate(user)
+      const userCreated = await this.create(user)
       const newUserId = userCreated._id.toString()
       const newUser = await this.getSingleUser(newUserId)
       return newUser
     } catch (error) {
       console.log('addUser', error)
+      throw error
     }
   }
 
-  async deleteUser (userId) {
+  async deleteUser(userId) {
     if (!ObjectID.isValid(userId)) {
       return Promise.reject('Invalid identifier')
     }
@@ -48,18 +60,19 @@ class UsersService extends BaseController {
     await this.delete(userId)
   }
 
-  getValidDocumentForInsert (data) {
+  getValidDocumentForInsert(data) {
     const user = {
       created: new Date(),
       updated: null
     }
 
-    user.name = parse.getString(data.name)
+    user.username = parse.getString(data.username)
+    user.password = parse.getString(data.password)
 
     return user
   }
 
-  getValidDocumentForUpdate (id, data) {
+  getValidDocumentForUpdate(id, data) {
     if (Object.keys(data).length === 0) {
       return new Error('Required fields are missing')
     }
@@ -75,7 +88,7 @@ class UsersService extends BaseController {
     return user
   }
 
-  changeProperties (user) {
+  changeProperties(user) {
     if (user) {
       user = JSON.parse(JSON.stringify(user))
       user.id = user._id.toString()

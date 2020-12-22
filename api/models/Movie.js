@@ -8,6 +8,10 @@ const MovieSchema = new Schema({
     type: ObjectId,
     required: [true, 'User created is missing!']
   },
+  url: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     required: [true, 'Video has no title?']

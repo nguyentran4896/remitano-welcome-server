@@ -10,9 +10,9 @@ const UserSchema = new Schema({
     type: String,
     unique: true
   },
-  passwd: {
+  password: {
     type: String,
-    select: false
+    required: true
   },
   likedVideos: [{
     type: String,
@@ -26,7 +26,7 @@ const UserSchema = new Schema({
   updated: Date
 });
 
-UserSchema.pre('save', () => {
+UserSchema.pre('save', function (next) {
   var user = this;
   if (!user.isModified('password')) return next();
 
@@ -39,5 +39,12 @@ UserSchema.pre('save', () => {
     });
   })
 })
+
+UserSchema.methods.comparePassword = function (candidatePassword, cb) {
+  bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+    if (err) return cb(err);
+    cb(null, isMatch);
+  });
+};
 
 module.exports = mongoose.model('User', UserSchema);

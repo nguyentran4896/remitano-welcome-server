@@ -1,4 +1,5 @@
 const MoviesService = require('../services/movies')
+const authenticateToken = require('../../jwt-auth').authenticateToken
 
 class MoviesRoute {
   constructor (router) {
@@ -13,6 +14,7 @@ class MoviesRoute {
     )
     this.router.post(
       '/v1/movies',
+      authenticateToken,
       this.addMovie.bind(this)
     )
     this.router.get(
@@ -21,10 +23,12 @@ class MoviesRoute {
     )
     this.router.put(
       '/v1/movies/:id',
+      authenticateToken,
       this.updateMovie.bind(this)
     )
     this.router.delete(
       '/v1/movies/:id',
+      authenticateToken,
       this.deleteMovie.bind(this)
     )
   }

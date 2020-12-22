@@ -16,8 +16,8 @@ app.set('view engine', 'ejs');
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_DOMAIN);
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,authorization');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
@@ -41,6 +41,8 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
+
+  console.log(err);
 
   // render the error page
   res.status(err.status || 500);

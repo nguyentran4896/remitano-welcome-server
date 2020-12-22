@@ -25,10 +25,10 @@ class AuthRoute {
   async login(req, res, next) {
     try {
       let user = await usersService.loginUser(req.body)
-      req.cookies.token = generateJWTToken(user)
+      let token = generateJWTToken(user)
       user.password = undefined
       req.user = user
-      res.send(user)
+      res.send(Object.assign(user.toObject(), {token}))
     } catch (error) {
       console.log(error);
       return next(error)
@@ -38,10 +38,10 @@ class AuthRoute {
   async addUser(req, res, next) {
     try {
       let user = await usersService.addUser(req.body)
-      req.cookies.token  = generateJWTToken(user)
+      let token = generateJWTToken(user)
       user.password = undefined
       req.user = user
-      res.send(user)
+      res.send(Object.assign(user.toObject(), {token}))
     } catch (error) {
       return next(error)
     }

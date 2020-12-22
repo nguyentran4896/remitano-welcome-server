@@ -54,7 +54,8 @@ class MoviesRoute {
   }
 
   addMovie (req, res, next) {
-    MoviesService.addMovie(req.body)
+    let data = { ...req.body, ...req.user}
+    MoviesService.addMovie(data)
       .then(data => {
         res.send(data)
       })

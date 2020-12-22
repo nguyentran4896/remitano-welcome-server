@@ -3,7 +3,10 @@ const authenticateToken = (req, res, next) => {
     // Gather the jwt access token from the request header
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1] || req.cookies.token
-    if (token == null) return res.sendStatus(401) // if there isn't any token
+    if (token == null) {
+        res.status(401)
+        return res.send('Logged out!')
+    }
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         console.log(err)

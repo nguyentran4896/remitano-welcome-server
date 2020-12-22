@@ -37,6 +37,7 @@ class MoviesService extends BaseController {
       return newMovie
     } catch (error) {
       console.log('addMovie', error)
+      throw error
     }
   }
 
@@ -54,11 +55,12 @@ class MoviesService extends BaseController {
       updated: null
     }
 
-    movie.userCreated = parse.getObjectIDIfValid(data.userCreated)
-    movie.title = parse.getString(data.title)
+    movie.userCreated = parse.getObjectIDIfValid(data._id)
+    movie.title = parse.getString(data.title) || 'sample title'
     movie.description = parse.getString(data.description)
     movie.likeCount = 0
     movie.disLikeCount = 0
+    movie.url = parse.getString(data.url)
 
     return movie
   }

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-require('../../models/User')
+require('../models/User')
 const User = mongoose.model('User')
 const ObjectID = mongoose.Types.ObjectId
 const parse = require('../helpers/parse')

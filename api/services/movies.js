@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
-require('../../models/Movie')
-const Movie = mongoose.model('Movie')
+
+const Movie = require('../models/Movie')
 const ObjectID = mongoose.Types.ObjectId
 const parse = require('../helpers/parse')
 const BaseController = require('../helpers/base')

@@ -1,8 +1,13 @@
+const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
-const Video = new Schema({
+const MovieSchema = new Schema({
   id: ObjectId,
+  userCreated: {
+    type: ObjectId,
+    required: [true, 'User created is missing!']
+  },
   title: {
     type: String,
     required: [true, 'Video has no title?']
@@ -23,4 +28,4 @@ const Video = new Schema({
   date: Date
 });
 
-module.exports = Video
+module.exports = mongoose.model('Movie', MovieSchema);

@@ -110,7 +110,6 @@ function storeToken(token) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 const makeAuthCall = async (auth) => {
-  console.log('afs');
   try {
     let response = await youtube.videos.list(
       {

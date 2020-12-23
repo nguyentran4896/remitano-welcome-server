@@ -69,7 +69,7 @@ class MoviesRoute {
     let data = { ...req.body, ...req.user}
     MoviesService.addMovie(data)
       .then(data => {
-        res.send(data)
+        res.send(JSON.stringify(data))
       })
       .catch(next)
   }

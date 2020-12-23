@@ -41,7 +41,7 @@ class AuthRoute {
       let token = generateJWTToken(user)
       user.password = undefined
       req.user = user
-      res.send(Object.assign(user.toObject(), {token}))
+      res.send(Object.assign(user, {token}))
     } catch (error) {
       return next(error)
     }

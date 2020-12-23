@@ -5,7 +5,7 @@ const ObjectId = Schema.ObjectId;
 const MovieSchema = new Schema({
   id: ObjectId,
   userCreated: {
-    type: String,
+    type: ObjectId,
     required: [true, 'User created is missing!']
   },
   url: {

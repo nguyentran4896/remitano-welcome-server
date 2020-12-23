@@ -17,16 +17,16 @@ app.set('view engine', 'ejs');
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_DOMAIN);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,authorization,X-Frame-Options');
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 const apiRouter = require('./api/routers');
 app.use('/api', apiRouter);
@@ -42,7 +42,7 @@ app.use(function (err, req, res, next) {
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV === 'development' ? err : {};
 
-  console.log(err);
+  console.error(err)
 
   // render the error page
   res.status(err.status || 500);

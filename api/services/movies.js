@@ -64,8 +64,9 @@ class MoviesService extends BaseController {
 
       const youtubeUrl = parse.getString(data.url)
       const videoDetail = await getVideoDetail(parse.getYoutubeIdFromUrl(youtubeUrl))
+      if (!videoDetail) throw {status: 404, message: 'Youtube video URL not found!'}
 
-      movie.userCreated = data.username.split('@')[0] // parse.getObjectIDIfValid(data._id)
+      movie.userCreated = parse.getObjectIDIfValid(data._id)
       movie.title = videoDetail.snippet.title || ''
       movie.description = videoDetail.snippet.description || ''
       movie.likeCount = 0

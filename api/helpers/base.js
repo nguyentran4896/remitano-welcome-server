@@ -36,6 +36,10 @@ class BaseController {
     return data
   }
 
+  async findAndUpdate (_id, obj) {
+    return await this.Model.findByIdAndUpdate(_id.toString(), {'$set': obj}, {new: true})
+  }
+
   async countDocuments () {
     return await this.Model.countDocuments()
   }

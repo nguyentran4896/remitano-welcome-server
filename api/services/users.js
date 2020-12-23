@@ -54,6 +54,23 @@ class UsersService extends BaseController {
     }
   }
 
+  async updateUser(id, data) {
+    try {
+      let user = await this.findOne(data)
+      if (!user) throw ({ status: 404, message: 'User not found!' })
+      user = this.getValidDocumentForUpdate(id, data)
+
+      const userUpdated = await this.findAndUpdate(id, user)
+
+      const userUpdatedId = userUpdated._id.toString()
+      const userUpdatedReturn = await this.getSingleUser(userUpdatedId)
+      return userUpdatedReturn
+    } catch (error) {
+      console.log('updateUser', error)
+      throw error
+    }
+  }
+
   async deleteUser(userId) {
     if (!ObjectID.isValid(userId)) {
       return Promise.reject('Invalid identifier')
@@ -83,8 +100,12 @@ class UsersService extends BaseController {
       updated: new Date()
     }
 
-    if (data.name !== undefined) {
-      user.name = parse.getString(data.name)
+    if (data.likedVideos !== undefined) {
+      user.likedVideos = data.likedVideos
+    }
+
+    if (data.disLikedVideos !== undefined) {
+      user.disLikedVideos = data.disLikedVideos
     }
 
     return user

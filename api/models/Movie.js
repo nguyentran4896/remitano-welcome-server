@@ -20,14 +20,8 @@ const MovieSchema = new Schema({
     type: String,
     default: ''
   },
-  likeCount: {
-    type: Number,
-    default: 0
-  },
-  disLikeCount: {
-    type: Number,
-    default: 0
-  },
+  likes: [String],
+  disLikes: [String],
   date: Date
 });
 

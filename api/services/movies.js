@@ -48,6 +48,26 @@ class MoviesService extends BaseController {
     }
   }
 
+  async updateMovie(id, data) {
+    try {
+
+      let movie = await this.get(id)
+      if (!movie) throw ({ status: 404, message: 'Movie not found!' })
+
+      movie = await this.getValidDocumentForUpdate(data)
+
+      const movieUpdated = await this.findAndUpdate(id, movie)
+
+      const newMovieId = movieUpdated._id.toString()
+      const newMovie = await this.getSingleMovie(newMovieId)
+      console.log(newMovie);
+      return newMovie
+    } catch (error) {
+      console.log('addMovie', error)
+      throw error
+    }
+  }
+
   async deleteMovie(movieId) {
     if (!ObjectID.isValid(movieId)) {
       return Promise.reject('Invalid identifier')
@@ -64,7 +84,7 @@ class MoviesService extends BaseController {
 
       const youtubeUrl = parse.getString(data.url)
       const videoDetail = await getVideoDetail(parse.getYoutubeIdFromUrl(youtubeUrl))
-      if (!videoDetail) throw {status: 404, message: 'Youtube video URL not found!'}
+      if (!videoDetail) throw { status: 404, message: 'Youtube video URL not found!' }
 
       movie.userCreated = parse.getObjectIDIfValid(data._id)
       movie.title = videoDetail.snippet.title || ''
@@ -80,7 +100,7 @@ class MoviesService extends BaseController {
     }
   }
 
-  getValidDocumentForUpdate(id, data) {
+  getValidDocumentForUpdate(data) {
     if (Object.keys(data).length === 0) {
       return new Error('Required fields are missing')
     }
@@ -89,12 +109,12 @@ class MoviesService extends BaseController {
       updated: new Date()
     }
 
-    if (data.likeCount !== undefined) {
-      movie.likeCount = parse.getNumberIfPositive(data.likeCount)
+    if (data.likes) {
+      movie.likes = data.likes
     }
 
-    if (data.disLikeCount !== undefined) {
-      movie.disLikeCount = parse.getNumberIfPositive(data.disLikeCount)
+    if (data.disLikes) {
+      movie.disLikes= data.disLikes
     }
 
     return movie

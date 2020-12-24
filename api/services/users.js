@@ -58,7 +58,7 @@ class UsersService extends BaseController {
     try {
       let user = await this.findOne(data)
       if (!user) throw ({ status: 404, message: 'User not found!' })
-      user = this.getValidDocumentForUpdate(id, data)
+      user = this.getValidDocumentForUpdate(data)
 
       const userUpdated = await this.findAndUpdate(id, user)
 
@@ -91,7 +91,7 @@ class UsersService extends BaseController {
     return user
   }
 
-  getValidDocumentForUpdate(id, data) {
+  getValidDocumentForUpdate(data) {
     if (Object.keys(data).length === 0) {
       return new Error('Required fields are missing')
     }
@@ -115,7 +115,7 @@ class UsersService extends BaseController {
     if (user) {
       user = JSON.parse(JSON.stringify(user))
       user.id = user._id.toString()
-      delete user._id
+      user._id = user._id.toString()
       delete user.__v
     }
 

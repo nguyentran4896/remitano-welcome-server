@@ -8,7 +8,7 @@ class BaseController {
   }
 
   async getAll (offset, limit) {
-    return this.Model.find().skip(offset).limit(limit)
+    return this.Model.find({}).sort({ _id: -1 }).skip(offset).limit(limit)
   }
 
   async delete (_id) {
